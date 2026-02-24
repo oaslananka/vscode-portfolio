@@ -85,7 +85,7 @@ const Layout = ({ children }: LayoutProps) => {
         return;
       }
 
-      if (key === 'g' || key === 'k') {
+      if ((key === 'g' || key === 'k') && !(e.target instanceof Element && e.target.closest('input, textarea'))) {
         e.preventDefault();
         setChordKey(key);
         setTimeout(() => setChordKey(null), 2000);
