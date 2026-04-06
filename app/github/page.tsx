@@ -4,6 +4,7 @@ import GitHubCalendar from 'react-github-calendar';
 import { VscRepo, VscPerson, VscStarEmpty, VscRepoForked, VscLinkExternal, VscGithub } from 'react-icons/vsc';
 
 import RepoCard from '@/components/RepoCard';
+import { siteConfig } from '@/data/site';
 import { Repo, User } from '@/types';
 
 import styles from '@/styles/GithubPage.module.css';
@@ -13,29 +14,74 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 600;
+const REPOS_PER_PAGE = 100;
+
+async function fetchGithubJson<T>(url: string, headers?: HeadersInit) {
+  const response = await fetch(url, { headers });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch GitHub data: ${response.status}`);
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function getAllRepos(username: string, headers?: HeadersInit) {
+  const allRepos: Repo[] = [];
+
+  for (let page = 1; ; page += 1) {
+    const pageRepos = await fetchGithubJson<Repo[]>(
+      `https://api.github.com/users/${username}/repos?type=owner&sort=updated&per_page=${REPOS_PER_PAGE}&page=${page}`,
+      headers
+    );
+
+    allRepos.push(...pageRepos);
+
+    if (pageRepos.length < REPOS_PER_PAGE) {
+      break;
+    }
+  }
+
+  return allRepos;
+}
 
 async function getGithubData() {
-  const userRes = await fetch(
-    `https://api.github.com/users/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}`
-  );
-  if (!userRes.ok) {
-    throw new Error(`Failed to fetch user: ${userRes.status}`);
-  }
-  const user: User = await userRes.json();
+  const headers = process.env.GITHUB_API_KEY
+    ? {
+        Authorization: `Bearer ${process.env.GITHUB_API_KEY}`,
+      }
+    : undefined;
 
-  const repoRes = await fetch(
-    `https://api.github.com/users/${process.env.NEXT_PUBLIC_GITHUB_USERNAME}/repos?sort=pushed&per_page=6`
-  );
-  if (!repoRes.ok) {
-    throw new Error(`Failed to fetch repos: ${repoRes.status}`);
-  }
-  const repos: Repo[] = await repoRes.json();
+  const username = siteConfig.github.username;
 
-  return { user, repos };
+  const [user, allRepos] = await Promise.all([
+    fetchGithubJson<User>(`https://api.github.com/users/${username}`, headers),
+    getAllRepos(username, headers),
+  ]);
+
+  const portfolioRepos = allRepos.filter((repo) => !repo.fork);
+  const repos = portfolioRepos.length > 0 ? portfolioRepos : allRepos;
+  const popularRepos = [...repos]
+    .sort((a, b) => {
+      if (b.stargazers_count !== a.stargazers_count) {
+        return b.stargazers_count - a.stargazers_count;
+      }
+
+      if (b.forks !== a.forks) {
+        return b.forks - a.forks;
+      }
+
+      return b.watchers - a.watchers;
+    })
+    .slice(0, 6);
+
+  return { user, repos, popularRepos };
 }
 
 export default async function GithubPage() {
-  const { user, repos } = await getGithubData();
+  const { user, repos, popularRepos } = await getGithubData();
+  const totalStars = repos.reduce((acc, repo) => acc + repo.stargazers_count, 0);
+  const totalForks = repos.reduce((acc, repo) => acc + repo.forks, 0);
 
   return (
     <div className={styles.page}>
@@ -76,7 +122,7 @@ export default async function GithubPage() {
               <VscRepo size={20} />
             </div>
             <div className={styles.statInfo}>
-              <span className={styles.statValue}>{user.public_repos}</span>
+              <span className={styles.statValue}>{repos.length}</span>
               <span className={styles.statLabel}>Repositories</span>
             </div>
           </div>
@@ -96,10 +142,8 @@ export default async function GithubPage() {
               <VscStarEmpty size={20} />
             </div>
             <div className={styles.statInfo}>
-              <span className={styles.statValue}>
-                {repos.reduce((acc, repo) => acc + repo.stargazers_count, 0)}
-              </span>
-              <span className={styles.statLabel}>Total Stars</span>
+              <span className={styles.statValue}>{totalStars}</span>
+              <span className={styles.statLabel}>Total Repo Stars</span>
             </div>
           </div>
 
@@ -108,10 +152,8 @@ export default async function GithubPage() {
               <VscRepoForked size={20} />
             </div>
             <div className={styles.statInfo}>
-              <span className={styles.statValue}>
-                {repos.reduce((acc, repo) => acc + repo.forks, 0)}
-              </span>
-              <span className={styles.statLabel}>Total Forks</span>
+              <span className={styles.statValue}>{totalForks}</span>
+              <span className={styles.statLabel}>Total Repo Forks</span>
             </div>
           </div>
         </div>
@@ -121,7 +163,7 @@ export default async function GithubPage() {
           <h2 className={styles.sectionTitle}>Contribution Activity</h2>
           <div className={styles.contributions}>
             <GitHubCalendar
-              username={process.env.NEXT_PUBLIC_GITHUB_USERNAME!}
+              username={siteConfig.github.username}
               hideColorLegend
               hideMonthLabels
               colorScheme="dark"
@@ -152,7 +194,7 @@ export default async function GithubPage() {
           </div>
           
           <div className={styles.reposGrid}>
-            {repos.map((repo) => (
+            {popularRepos.map((repo) => (
               <RepoCard key={repo.id} repo={repo} />
             ))}
           </div>

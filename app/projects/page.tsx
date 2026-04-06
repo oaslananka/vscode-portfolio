@@ -3,6 +3,7 @@ import { VscFolderOpened, VscGithub, VscLinkExternal } from 'react-icons/vsc';
 
 import ProjectCard from '@/components/ProjectCard';
 import { projects } from '@/data/projects';
+import { siteConfig } from '@/data/site';
 
 import styles from '@/styles/ProjectsPage.module.css';
 
@@ -22,15 +23,16 @@ const ProjectsPage = () => {
               <VscFolderOpened className={styles.icon} size={24} />
             </div>
             <div className={styles.meta}>
-              <span className={styles.count}>{totalProjects} Projects</span>
+              <span className={styles.count}>{totalProjects} Links</span>
             </div>
           </div>
           
           <div className={styles.headerContent}>
-            <h1 className={styles.title}>Featured Work</h1>
+            <h1 className={styles.title}>GitHub Access</h1>
             <p className={styles.subtitle}>
-              A curated collection of projects I&apos;ve built. Each represents 
-              a unique challenge and learning experience.
+              Direct links to my GitHub profile and the full repository list.
+              This section stays intentionally simple so the focus remains on
+              the code itself.
             </p>
           </div>
         </header>
@@ -48,7 +50,7 @@ const ProjectsPage = () => {
         <footer className={styles.footer}>
           <div className={styles.footerLine} />
           <a 
-            href="https://github.com/itsnitinr?tab=repositories"
+            href={siteConfig.links.githubRepositories}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.footerLink}

@@ -3,6 +3,7 @@ import { VscBook, VscLinkExternal, VscGlobe } from 'react-icons/vsc';
 
 import ArticleCard from '@/components/ArticleCard';
 
+import { siteConfig } from '@/data/site';
 import { Article } from '@/types';
 
 import styles from '@/styles/ArticlesPage.module.css';
@@ -33,7 +34,10 @@ async function getArticles(): Promise<Article[]> {
 
 export default async function ArticlesPage() {
   const articles = await getArticles();
-  const totalViews = articles.reduce((sum, article) => sum + article.page_views_count, 0);
+  const totalViews = articles.reduce(
+    (sum, article) => sum + article.page_views_count,
+    0
+  );
 
   return (
     <div className={styles.page}>
@@ -60,14 +64,14 @@ export default async function ArticlesPage() {
               </div>
               
               <p className={styles.subtitle}>
-                Technical writing on web development. Sharing insights, 
-                tutorials, and lessons learned from building real-world applications.
+                Technical writing on web development, software projects, and
+                lessons learned while building real products.
               </p>
             </div>
           </div>
 
           <a 
-            href="https://dev.to/itsnitinr"
+            href={siteConfig.links.devtoProfile}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.profileLink}
@@ -78,13 +82,20 @@ export default async function ArticlesPage() {
         </header>
 
         <div className={styles.articlesList}>
-          {articles.map((article, index) => (
-            <ArticleCard 
-              key={article.id} 
-              article={article}
-              index={index + 1}
-            />
-          ))}
+          {articles.length > 0 ? (
+            articles.map((article, index) => (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                index={index + 1}
+              />
+            ))
+          ) : (
+            <p className={styles.subtitle}>
+              No DEV.to posts are connected yet. Add a valid `DEV_TO_API_KEY`
+              to publish articles here.
+            </p>
+          )}
         </div>
       </div>
     </div>

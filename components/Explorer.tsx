@@ -3,47 +3,19 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { VscChevronRight } from 'react-icons/vsc';
 
+import {
+  explorerItems,
+  workspaceGroupName,
+  workspaceTitle,
+} from '@/data/workspace';
 import styles from '@/styles/Explorer.module.css';
-
-const explorerItems = [
-  {
-    name: 'home.tsx',
-    path: '/',
-    icon: '/logos/react_icon.svg',
-  },
-  {
-    name: 'about.html',
-    path: '/about',
-    icon: '/logos/html_icon.svg',
-  },
-  {
-    name: 'contact.css',
-    path: '/contact',
-    icon: '/logos/css_icon.svg',
-  },
-  {
-    name: 'projects.js',
-    path: '/projects',
-    icon: '/logos/js_icon.svg',
-  },
-  {
-    name: 'articles.json',
-    path: '/articles',
-    icon: '/logos/json_icon.svg',
-  },
-  {
-    name: 'github.md',
-    path: '/github',
-    icon: '/logos/markdown_icon.svg',
-  },
-];
 
 const Explorer = () => {
   const [portfolioOpen, setPortfolioOpen] = useState(true);
 
   return (
     <div className={styles.explorer}>
-      <p className={styles.title}>Explorer</p>
+      <p className={styles.title}>{workspaceTitle}</p>
       <div>
         <input
           type="checkbox"
@@ -57,17 +29,22 @@ const Explorer = () => {
             className={styles.chevron}
             style={portfolioOpen ? { transform: 'rotate(90deg)' } : {}}
           />
-          Portfolio
+          {workspaceGroupName}
         </label>
         <div
           className={styles.files}
           style={portfolioOpen ? { display: 'block' } : { display: 'none' }}
         >
           {explorerItems.map((item) => (
-            <Link href={item.path} key={item.name}>
+            <Link href={item.path} key={item.filename}>
               <div className={styles.file}>
-                <Image src={item.icon} alt={item.name} height={18} width={18} />{' '}
-                <p>{item.name}</p>
+                <Image
+                  src={item.icon}
+                  alt={item.filename}
+                  height={18}
+                  width={18}
+                />
+                <p>{item.filename}</p>
               </div>
             </Link>
           ))}

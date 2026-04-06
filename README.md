@@ -1,5 +1,5 @@
 # vscode-portfolio
-[![Open is Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/itsnitinr/vscode-portfolio)
+[![Open is Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/oaslananka/vscode-portfolio)
 
 A Visual Studio Code themed developer portfolio website built with Next.js and deployed on Vercel.
 
@@ -31,7 +31,13 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-All VSCode related components can be found in the `components` folder. To change the content of the portfolio, check out the `pages` folder. To add or remove pages, modify `components/Sidebar.jsx` and `components/Tabsbar.jsx`.
+## Managing Portfolio Content
+
+Most personal content now lives in `data/site.ts`.
+
+- Edit `data/site.ts` for name, bio, SEO, links, skills, contact items, and terminal copy.
+- Edit `data/projects.ts` for featured projects.
+- Keep secrets and API keys in `.env` or `.env.local`.
 
 ## Next.js Resources
 

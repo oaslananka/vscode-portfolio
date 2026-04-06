@@ -8,6 +8,7 @@ import {
 } from 'react-icons/vsc';
 import { SiNextdotjs } from 'react-icons/si';
 
+import { siteConfig } from '@/data/site';
 import styles from '@/styles/Bottombar.module.css';
 
 interface BottombarProps {
@@ -20,7 +21,7 @@ const Bottombar = ({ onTerminalToggle, isTerminalOpen }: BottombarProps) => {
     <footer className={styles.bottomBar}>
       <div className={styles.container}>
         <a
-          href="https://github.com/itsnitinr/vscode-portfolio"
+          href={siteConfig.links.githubRepo}
           target="_blank"
           rel="noreferrer noopener"
           className={styles.section}

@@ -50,6 +50,10 @@
   margin-left: 5px;
 }
 
+.fileIcon {
+  flex-shrink: 0;
+}
+
 .file:hover {
   background: var(--explorer-hover-bg);
 }

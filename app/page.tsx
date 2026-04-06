@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { VscArrowRight, VscGithub, VscMail, VscCode } from 'react-icons/vsc';
+import { FaLinkedinIn } from 'react-icons/fa6';
+import { LuCircuitBoard } from 'react-icons/lu';
+import { VscArrowRight, VscGithub, VscMail } from 'react-icons/vsc';
 
+import { siteConfig } from '@/data/site';
 import styles from '@/styles/HomePage.module.css';
 
 export default function HomePage() {
@@ -12,23 +15,22 @@ export default function HomePage() {
         <div className={styles.content}>
           <div className={styles.header}>
             <div className={styles.icon}>
-              <VscCode size={32} />
+              <LuCircuitBoard size={32} />
             </div>
           </div>
 
           <div className={styles.intro}>
-            <p className={styles.greeting}>Hello, I&apos;m</p>
+            <p className={styles.greeting}>{siteConfig.home.greeting}</p>
             
-            <h1 className={styles.name}>Nitin Ranganath</h1>
+            <h1 className={styles.name}>{siteConfig.owner.name}</h1>
             
-            <p className={styles.role}>Full Stack Developer</p>
+            <p className={styles.role}>{siteConfig.home.role}</p>
+            <p className={styles.specialties}>{siteConfig.home.specialties}</p>
             
             <div className={styles.divider} />
             
             <p className={styles.description}>
-              I craft clean, performant web applications with modern technologies. 
-              Specialized in TypeScript, React, Node.js, and building products 
-              that users love.
+              {siteConfig.home.description}
             </p>
           </div>
 
@@ -45,7 +47,7 @@ export default function HomePage() {
 
           <div className={styles.links}>
             <a 
-              href="https://github.com/itsnitinr" 
+              href={siteConfig.links.githubProfile}
               target="_blank" 
               rel="noopener noreferrer"
               className={styles.link}
@@ -54,6 +56,18 @@ export default function HomePage() {
               <span>GitHub</span>
             </a>
             
+            <span className={styles.linkSeparator}>/</span>
+
+            <a
+              href="https://www.linkedin.com/in/oaslananka"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              <FaLinkedinIn size={14} />
+              <span>LinkedIn</span>
+            </a>
+
             <span className={styles.linkSeparator}>/</span>
             
             <Link href="/contact" className={styles.link}>

@@ -20,15 +20,17 @@ const ArticleCard = ({ article, index }: ArticleCardProps) => {
     >
       <div className={styles.number}>{String(index).padStart(2, '0')}</div>
       
-      <div className={styles.imageWrapper}>
-        <Image
-          src={article.cover_image}
-          alt={article.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 200px"
-          className={styles.image}
-        />
-      </div>
+      {article.cover_image && (
+        <div className={styles.imageWrapper}>
+          <Image
+            src={article.cover_image}
+            alt={article.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 200px"
+            className={styles.image}
+          />
+        </div>
+      )}
       
       <div className={styles.content}>
         <div className={styles.main}>

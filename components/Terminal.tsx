@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { VscTerminal, VscClose } from 'react-icons/vsc';
 
+import { projects } from '@/data/projects';
+import { publicContactItems, siteConfig } from '@/data/site';
+import { explorerItems } from '@/data/workspace';
 import { THEME_KEYS } from '@/lib/themes';
 import styles from '@/styles/Terminal.module.css';
 
@@ -28,35 +31,24 @@ const commands: Record<string, () => string[]> = {
     '  pwd       - Print working directory',
     '  echo      - Echo text (usage: echo <text>)',
   ],
-  about: () => [
-    "Hi, I'm Nitin!",
-    'A passionate full-stack developer who loves building beautiful,',
-    'functional web applications. This portfolio is styled like VS Code',
-    'because I spend most of my time here anyway.',
-  ],
+  about: () => [...siteConfig.terminal.about],
   skills: () => [
     'Technical Skills:',
-    '  Languages:  TypeScript, JavaScript, Python, Go, Rust',
-    '  Frontend:   React, Next.js, Vue, Tailwind CSS',
-    '  Backend:    Node.js, Express, FastAPI, GraphQL',
-    '  Database:   PostgreSQL, MongoDB, Redis',
-    '  DevOps:     Docker, Kubernetes, AWS, GitHub Actions',
-    '  Tools:      VS Code, Git, Figma, Linux',
+    ...siteConfig.terminal.skillLines,
   ],
   projects: () => [
     'Featured Projects:',
-    '  1. vscode-portfolio - This portfolio you are viewing!',
-    '  2. Various open-source contributions',
-    '  3. Full-stack web applications',
+    ...projects.slice(0, 3).map(
+      (project, index) => `  ${index + 1}. ${project.slug} - ${project.title}`
+    ),
     '',
     'Visit the Projects tab for more details.',
   ],
   contact: () => [
     'Contact Information:',
-    '  Email:    hello@example.com',
-    '  GitHub:   github.com/itsnitinr',
-    '  Twitter:  @itsnitinr',
-    '  LinkedIn: linkedin.com/in/itsnitinr',
+    ...publicContactItems.map(
+      (item) => `  ${item.social.padEnd(11, ' ')} ${item.link}`
+    ),
   ],
   themes: () => [
     'Available themes:',
@@ -66,8 +58,8 @@ const commands: Record<string, () => string[]> = {
   ],
   date: () => [new Date().toString()],
   whoami: () => ['visitor@portfolio ~ exploring awesome projects'],
-  ls: () => ['about/', 'projects/', 'skills/', 'contact/', 'README.md'],
-  pwd: () => ['/home/visitor/portfolio'],
+  ls: () => [...explorerItems.map((item) => item.filename), 'README.md'],
+  pwd: () => ['/workspace/edge-systems'],
 };
 
 const processCommand = (input: string): TerminalLine[] => {

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 
+import { siteConfig } from '@/data/site';
 import styles from '@/styles/Titlebar.module.css';
 
 interface TitlebarProps {
@@ -33,7 +34,9 @@ const Titlebar = ({ onOpenCommandPalette }: TitlebarProps) => {
         <p>Terminal</p>
         <p>Help</p>
       </div>
-      <p className={styles.title}>Nitin Ranganath - Visual Studio Code</p>
+      <p className={styles.title}>
+        {siteConfig.owner.name} - Edge Systems Workspace
+      </p>
       <div className={styles.windowButtons}>
         <span className={styles.minimize}></span>
         <span className={styles.maximize}></span>
