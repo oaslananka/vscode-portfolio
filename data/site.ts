@@ -7,7 +7,7 @@ import {
 
 const githubUsername = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'oaslananka';
 const githubRepo =
-  process.env.NEXT_PUBLIC_GITHUB_REPO || `${githubUsername}/vscode-portfolio`;
+  process.env.NEXT_PUBLIC_GITHUB_REPO || `${githubUsername}/oaslananka-portfolio`;
 const primaryDomain = 'https://oaslananka.dev';
 const githubPagesDomain = `https://${githubUsername}.github.io/`;
 
